@@ -71,12 +71,12 @@ boundedbest([Pos | PosList], Alpha, Beta, GoodPos, GoodVal)  :-
 goodenough( [], _, _, Pos, Val, Pos, Val)  :-  !.    % No other candidate
 
 goodenough( _, Alpha, Beta, Pos, Val, Pos, Val)  :-
-  min_to_move( Pos), Val > Beta, !                   % Maximizer attained upper bound
+  min_to_move( Pos), Val > Beta, !                   
   ;
-  max_to_move( Pos), Val < Alpha, !.                 % Minimizer attained lower bound
+  max_to_move( Pos), Val < Alpha, !.                 
 
 goodenough( PosList, Alpha, Beta, Pos, Val, GoodPos, GoodVal)  :-
-  newbounds( Alpha, Beta, Pos, Val, NewAlpha, NewBeta),    % Refine bounds  
+  newbounds( Alpha, Beta, Pos, Val, NewAlpha, NewBeta),  
   boundedbest( PosList, NewAlpha, NewBeta, Pos1, Val1),
   betterof( Pos, Val, Pos1, Val1, GoodPos, GoodVal).
 

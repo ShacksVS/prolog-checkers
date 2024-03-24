@@ -227,7 +227,6 @@ next(piece_count(black, Lower)) :-
 %* LEGAL MOVES and their auxilliary axioms                                     *
 %*******************************************************************************
 
-
 legal(Player, move(Piece, U, V, X, Y)) :- 
     true(control(Player)), 
     true(cell(U, V, Piece)), 
@@ -366,9 +365,6 @@ kingjump(Player, U, V, X, Y) :-
     role(Player), 
     role(Player2), 
     pawnjump(Player2, U, V, X, Y).
-
-% single jump capture ?player means player is jumping from 
-% u v to x y over c d, and an opponent's piece is at c d.
 
 single_jump_capture(Player, U, V, C, D, X, Y) :- 
     kingjump(Player, U, V, X, Y), 
