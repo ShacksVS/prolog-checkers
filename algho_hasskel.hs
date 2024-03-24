@@ -343,6 +343,7 @@ assess depth player maximizing alpha beta state =
         let v' = assess (depth - 1) player (not maximizing) alpha' beta state'
         in go (minOrMax v v') (minOrMax alpha' v') states
 
+-- AlphaBeta
 aiNextStep :: GameState -> (Position, Position)
 aiNextStep state@(GameState player _ []) =
     maximumBy (comparing assess') $ availableTurns state

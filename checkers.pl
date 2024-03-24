@@ -227,13 +227,7 @@ next(piece_count(black, Lower)) :-
 %* LEGAL MOVES and their auxilliary axioms                                     *
 %*******************************************************************************
 
-% Checks if there is any capture available for the player
-mandatory_capture(Player) :-
-    piece_owner_type(Piece, Player, _),
-    (legal_capture(Player, Piece, _U, _V, _X, _Y) ; 
-     legal_doublejump(Player, Piece, _U, _V, _X1, _Y1, _X2, _Y2) ; 
-     legal_triplejump(Player, Piece, _U, _V, _X1, _Y1, _X2, _Y2, _X3, _Y3)).
-     
+
 legal(Player, move(Piece, U, V, X, Y)) :- 
     true(control(Player)), 
     true(cell(U, V, Piece)), 
