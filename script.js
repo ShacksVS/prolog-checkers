@@ -194,7 +194,7 @@
         this.pieces = this.pieces.filter(function (piece) {
             return !(piece.column === column && piece.row === row);
         });
-
+        this.set_clickables();
         this.draw();
     };
 
@@ -291,6 +291,7 @@
                                             moveInfo.middleColumn, moveInfo.middleRow,
                                             moveInfo.endColumn, moveInfo.endRow
                                         );
+                                        console.log(captureCells)
                                         captureCells.forEach(({captureColumn, captureRow}) => {
                                             var capturedPiece = board.get_piece(captureColumn, captureRow.toString());
                                             if (capturedPiece && capturedPiece.colour !== piece.colour) {
@@ -300,7 +301,7 @@
                                     }
                                 }
 
-                                if (move_str.includes("triplejump")) {
+                                else if (move_str.includes("triplejump")) {
                                     var moveInfo = board.parseTripleJumpMove(move_str);
                                     if (moveInfo) {
                                         var captureCells = board.calculateCaptureCellsForTripleJump(
@@ -318,7 +319,7 @@
                                     }
                                 }
 
-                                if (capturedPiece && capturedPiece.colour !== piece.colour) {
+                                else if (capturedPiece && capturedPiece.colour !== piece.colour) {
                                     board.removePieceAt(captureColumn, captureRow.toString());
                                 }
                                 board.game.create_send_str();
@@ -335,7 +336,7 @@
     Board.prototype.parseDoubleJumpMove = function (moveStr) {
         const regex = /doublejump\(wp,([a-h]),(\d),([a-h]),(\d),([a-h]),(\d)\)/;
         const match = moveStr.match(regex);
-
+        console.log(match)
         if (match) {
             return {
                 startColumn: match[1],
