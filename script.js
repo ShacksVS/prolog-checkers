@@ -299,9 +299,7 @@
                                             }
                                         });
                                     }
-                                }
-
-                                else if (move_str.includes("triplejump")) {
+                                } else if (move_str.includes("triplejump")) {
                                     var moveInfo = board.parseTripleJumpMove(move_str);
                                     if (moveInfo) {
                                         var captureCells = board.calculateCaptureCellsForTripleJump(
@@ -317,9 +315,7 @@
                                             }
                                         });
                                     }
-                                }
-
-                                else if (capturedPiece && capturedPiece.colour !== piece.colour) {
+                                } else if (capturedPiece && capturedPiece.colour !== piece.colour) {
                                     board.removePieceAt(captureColumn, captureRow.toString());
                                 }
                                 board.game.create_send_str();
@@ -487,14 +483,31 @@
         }
         var move = response[5].split("=")[1];
         if (move !== "noop") {
-            var match = move.match(/move\((\w+),(\w+),(\d+),(\w+),(\d+)\)/);
-            if (match) {
-                var startColumn = match[2]; // g
-                var startRow = match[3]; // 6
-                var endColumn = match[4]; // h
-                var endRow = match[5]; // 5
-                this.board.animateMove(startColumn, startRow, endColumn, endRow);
+            var doubleJumpMatch = move.match(/doublejump\((\w+),([a-h]),(\d),([a-h]),(\d),([a-h]),(\d)\)/);
+            var tripleJumpMatch = move.match(/triplejump\((\w+),([a-h]),(\d),([a-h]),(\d),([a-h]),(\d),([a-h]),(\d)\)/);
 
+            if (doubleJumpMatch) {
+                var startColumn = doubleJumpMatch[2];
+                var startRow = doubleJumpMatch[3];
+                var endColumn = doubleJumpMatch[6];
+                var endRow = doubleJumpMatch[7];
+                this.board.animateMove(startColumn, startRow, endColumn, endRow);
+            } else if (tripleJumpMatch) {
+                var startColumn = tripleJumpMatch[2];
+                var startRow = tripleJumpMatch[3];
+                var endColumn = tripleJumpMatch[8];
+                var endRow = tripleJumpMatch[9];
+                this.board.animateMove(startColumn, startRow, endColumn, endRow);
+            } else {
+
+                var standardMoveMatch = move.match(/move\((\w+),([a-h]),(\d),([a-h]),(\d)\)/);
+                if (standardMoveMatch) {
+                    var startColumn = standardMoveMatch[2];
+                    var startRow = standardMoveMatch[3];
+                    var endColumn = standardMoveMatch[4];
+                    var endRow = standardMoveMatch[5];
+                    this.board.animateMove(startColumn, startRow, endColumn, endRow);
+                }
 
             }
             if (this.moves_list === "") {
