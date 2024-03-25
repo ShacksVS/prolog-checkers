@@ -390,7 +390,7 @@
         var board = this;
         if (this.game.life_stage === "start") {
             var that = this.game;
-            message.innerHTML = 'Would you like to play <input id="red" type="button" value="Red">' +
+            message.innerHTML = 'Choose the side <input id="red" type="button" value="Red">' +
                 'or <input id="black" type="button" value="Black">';
             document.getElementById("red").onclick = function () {
                 that.set_player("red");
@@ -526,7 +526,7 @@
 
     Game.prototype.server_call = function (send_str) {
         this.control = this.ai_player;
-        message.textContent = "Computer is thinking...";
+        message.textContent = "Wait for AI to move..";
         document.body.style.cursor = 'wait';
         this.httpRequest = new XMLHttpRequest();
         if (!this.httpRequest) {
