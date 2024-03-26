@@ -2,35 +2,64 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #fffcdf;
     margin: 0;
-    padding: 20px;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align items at the start for a better layout */
-    height: auto; /* Adjust to auto for a more flexible layout */
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
 }
 
 #board {
     border: 2px solid #333;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin-right: 20px; /* Ensure there's space between the board and the sidebar */
+    width: 80vw; /* Use vw unit */
+    height: 80vw; /* Keep the board square with height equal to width */
+    max-width: 800px;
+    max-height: 800px;
+    margin-right: 5%; /* Use percentage for spacing */
 }
 
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* This creates space between the containers inside sidebar */
-    width: 200px; /* Adjust width as needed */
-}
-
-#rightcol, #info-container {
+#rightcol,
+#info-container {
+    position: fixed;
+    top: 10%; /* Use percentage for top offset */
+    right: 5%; /* Use percentage for right offset */
     padding: 10px;
     border: 1px solid #ccc;
     background-color: #ffffff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px; /* Add margin for spacing, or you can remove this if using gap */
+    width: 20vw; /* Use vw unit for width */
+    max-width: 200px; /* Maximum width */
 }
 
+#info-container {
+    top: auto; /* Let the top be determined by document flow */
+    bottom: 40%; /* Use percentage for bottom offset */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #board {
+        width: 70vw;
+        height: 70vw;
+        margin-right: 2%;
+    }
+
+    #rightcol,
+    #info-container {
+        width: 50vw;
+        top: 5%;
+        right: 5%;
+        max-width: none;
+    }
+
+    #info-container {
+        bottom: 5%;
+    }
+}
+
+/* Styles for message, turns, pawns */
 #message, #turn, #redPawns, #blackPawns {
     padding: 10px;
     margin: 10px 0;
@@ -41,6 +70,7 @@ body {
     border-radius: 5px;
 }
 
+/* Styles for buttons */
 input[type="button"] {
     display: block;
     width: 100%;

@@ -2,6 +2,7 @@
     "use strict";
 
     var message = document.getElementById("message");
+    var message1 = document.getElementById("message1");
     var turn = document.getElementById("turn");
 
     var play_again = function () {
@@ -16,11 +17,11 @@
 
     var list2prolog_string = function (list) {
         var prolog_string = JSON.stringify(list).replace(/"/g, "").slice(1, -1);
-        return prolog_string.replace(/\[(\w+)\,/g, "$1(").replace(/\]/g, ")").replace(",", "(") + ")";
+        return prolog_string.replace(/\[(\w+),/g, "$1(").replace(/]/g, ")").replace(",", "(") + ")";
     };
 
 
-    function Cell(board, column, row, colour) { // note column, row - not matrix notation
+    function Cell(board, column, row, colour) {
         this.board = board;
         this.column = column;
         this.row = row;
@@ -35,7 +36,7 @@
         this.board.context.fillRect(this.x, this.y, this.l, this.l);
     };
 
-    function Piece(board, column, row, type) { // note column, row - not matrix notation
+    function Piece(board, column, row, type) {
         this.board = board;
         this.column = column;
         this.row = row;
@@ -49,9 +50,9 @@
     Piece.prototype.draw = function (colour) {
       this.board.context.fillStyle = colour;
   
-      // Set the border color to white and adjust the width as needed
-      this.board.context.strokeStyle = "white"; // White border
-      this.board.context.lineWidth = 4; // Adjust the border thickness here
+
+      this.board.context.strokeStyle = "white";
+      this.board.context.lineWidth = 4;
   
       this.board.context.beginPath();
       this.board.context.arc(this.x_centre, this.y_centre, this.radius, 0, Math.PI * 2);
@@ -59,18 +60,6 @@
       this.board.context.fill();
       this.board.context.stroke();
   };
-  
-
-    Piece.prototype.oldpos_draw = function (colour) {
-        this.board.context.strokeStyle = colour;
-        this.board.context.setLineDash([6, 3]);
-        this.board.context.lineWidth = 3;
-        this.board.context.beginPath();
-        this.board.context.arc(this.x_centre, this.y_centre, this.radius, 0, Math.PI * 2);
-        this.board.context.closePath();
-        this.board.context.stroke();
-    };
-
     function Board(game) {
         this.DIM = 8;
         this.COLUMNS = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -79,11 +68,11 @@
         this.game = game;
         this.canvas = document.getElementById("board");
         this.context = this.canvas.getContext("2d");
-        this.canvas.onclick = this.select.bind(this); // breaks without bind(this)
+        this.canvas.onclick = this.select.bind(this);
         this.canvas.onmousemove = this.get_highlight.bind(this);
         this.SQUARE_LENGTH = Math.floor(this.canvas.width / this.DIM);
-        this.set_cells(); // reference as this.cells
-        this.set_pieces(); // reference as this.pieces
+        this.set_cells();
+        this.set_pieces();
         this.set_clickables();
     }
 
@@ -92,7 +81,6 @@
         var board = this;
         for (var row = 0; row < this.DIM; row++) {
             for (var column = 0; column < this.DIM; column++) {
-                // draw a checker board
                 if (((row % 2 === 0) && (column % 2 === 0)) || ((row % 2 === 1) && (column % 2 === 1))) {
                     cells.push(new Cell(board, board.COLUMNS[column], board.ROWS[row], "silver"));
                 } else {
@@ -112,7 +100,7 @@
         var targetX = destinationCell.x + (board.SQUARE_LENGTH / 2);
         var targetY = destinationCell.y + (board.SQUARE_LENGTH / 2);
         var step = 0;
-        var totalSteps = 10; // Number of steps for the animation
+        var totalSteps = 10;
 
         var moveInterval = setInterval(function () {
             step++;
@@ -121,17 +109,17 @@
             piece.x_centre = newX;
             piece.y_centre = newY;
 
-            board.draw(); // Redraw the board with the piece's new position
+            board.draw();
 
             if (step >= totalSteps) {
                 clearInterval(moveInterval);
-                piece.column = endColumn; // Update piece's column and row to reflect its new position
+                piece.column = endColumn;
                 piece.row = endRow;
                 board.draw();
                 board.set_pieces();
 
             }
-        }, 20); // Milliseconds between each step
+        }, 20);
     }
 
     Board.prototype.get_cell = function (column, row) {
@@ -141,7 +129,6 @@
         return cells[0];
     };
 
-    // Assuming this method is called whenever the board's state is updated
     Board.prototype.set_pieces = function () {
       var pieces = [];
       var redCount = 0;
@@ -167,7 +154,6 @@
       });
       this.pieces = pieces;
 
-      // Update the pawn count display
       document.getElementById("redPawns").textContent = "Red Pawns: " + redCount;
       document.getElementById("blackPawns").textContent = "Black Pawns: " + blackCount;
     };
@@ -190,7 +176,7 @@
         this.clickables = clickables;
     };
 
-    Board.prototype.get_highlight = function (event) {  // rename get_clickables?
+    Board.prototype.get_highlight = function (event) {
         if (this.game.control === this.game.human_player) {
             var rect = this.canvas.getBoundingClientRect();
             var row = this.ROWS[Math.floor((event.clientY - rect.top) / this.SQUARE_LENGTH)];
@@ -264,7 +250,7 @@
                         var targetX = destinationCell.x + (board.SQUARE_LENGTH / 2);
                         var targetY = destinationCell.y + (board.SQUARE_LENGTH / 2);
                         var step = 0;
-                        var totalSteps = 10; // Adjust this number for smoother/faster animation
+                        var totalSteps = 10;
 
                         var moveInterval = setInterval(function () {
                             step++;
@@ -276,7 +262,6 @@
 
                             if (step >= totalSteps) {
                                 clearInterval(moveInterval);
-                                // Update the state after the animation is complete
                                 board.game.state = board.game.state.replace("cell(" + board.from_column + "," + board.from_row + "," + type + ")",
                                     "cell(" + board.from_column + "," + board.from_row + "," + "b)");
                                 board.game.state = board.game.state.replace("cell(" + column + "," + row + "," + "b)",
@@ -294,10 +279,8 @@
                                 board.draw();
                                 if (board.game.moves_list === "") {
                                     board.game.moves_list = move_str;
-                                    console.log(move_str)
                                 } else {
                                     board.game.moves_list = board.game.moves_list + "," + move_str;
-                                    console.log(move_str)
                                 }
                                 if (move_str.includes("doublejump")) {
                                     var moveInfo = board.parseDoubleJumpMove(move_str);
@@ -307,7 +290,6 @@
                                             moveInfo.middleColumn, moveInfo.middleRow,
                                             moveInfo.endColumn, moveInfo.endRow
                                         );
-                                        console.log(captureCells)
                                         captureCells.forEach(({captureColumn, captureRow}) => {
                                             var capturedPiece = board.get_piece(captureColumn, captureRow.toString());
                                             if (capturedPiece && capturedPiece.colour !== piece.colour) {
@@ -338,7 +320,7 @@
                             }
                         }, 20);
                     } else {
-                        message.textContent = move_str; //bug here
+                        message.textContent = move_str;
                     }
                 }
             }
@@ -348,7 +330,6 @@
     Board.prototype.parseDoubleJumpMove = function (moveStr) {
         const regex = /doublejump\(wp,([a-h]),(\d),([a-h]),(\d),([a-h]),(\d)\)/;
         const match = moveStr.match(regex);
-        console.log(match)
         if (match) {
             return {
                 startColumn: match[1],
@@ -405,6 +386,7 @@
             var that = this.game;
             message.innerHTML = 'Choose the side <input id="black" type="button" value="Black">' +
                 '<input id="red" type="button" value="Red">';
+
             document.getElementById("red").onclick = function () {
                 that.set_player("red");
             };
@@ -446,16 +428,14 @@
         this.legals = "[does(red,move(wp,b,3,a,4)),does(red,move(wp,b,3,c,4)),does(red,move(wp,d,3,c,4)),does(red,move(wp,d,3,e,4))," +
             "does(red,move(wp,f,3,e,4)),does(red,move(wp,f,3,g,4)),does(red,move(wp,h,3,g,4))]";
         this.state = this.init;
-        this.set_actions(); // access as actions
+        this.set_actions();
         this.moves_list = "";
-        this.roles = ["red", "black"];
         this.control = "red";
         this.red_reward = 50;
         this.black_reward = 50;
-        this.life_stage = "start"; // maybe need a pick_piece stage?
+        this.life_stage = "start";
         this.step = 0;
         this.board = new Board(this);
-        // this.board.update_state();
         this.board.draw();
     }
 
@@ -470,17 +450,21 @@
             this.ai_player = "black";
             this.control = this.human_player;
             message.textContent = "Your Turn";
+
             document.body.style.cursor = 'pointer';
         } else {
             this.human_player = "black";
             this.ai_player = "red";
-            // get server to return opening move
             var send_str = "state=" + encodeURIComponent(this.state) +
                 "&aiplayer=" + encodeURIComponent(this.ai_player) +
-                "&moves=" + encodeURIComponent("[noop]"); // bug needs fixing
+                "&moves=" + encodeURIComponent("[noop]");
             this.server_call(send_str);
         }
-        this.life_stage = "underway"; // rather use gdl notation start, play, stop
+        message1.innerHTML = '<input id="restart" type="button" value="Restart game">';
+        document.getElementById("restart").onclick = function () {
+            play_again();
+        };
+        this.life_stage = "underway";
     };
 
 
@@ -575,10 +559,9 @@
         var send_str = "state=" + encodeURIComponent(this.state) +
             "&aiplayer=" + encodeURIComponent(this.ai_player) +
             "&moves=" + encodeURIComponent("[" + this.moves_list + "]");
-        console.log(this.moves_list)
         this.server_call(send_str);
     };
 
-    var game = new Game();
+    new Game();
 }());
 
