@@ -47,16 +47,19 @@
     }
 
     Piece.prototype.draw = function (colour) {
-        this.board.context.fillStyle = colour;
-        this.board.context.strokeStyle = colour;
-        this.board.context.setLineDash([]);
-        this.board.context.lineWidth = 1;
-        this.board.context.beginPath();
-        this.board.context.arc(this.x_centre, this.y_centre, this.radius, 0, Math.PI * 2);
-        this.board.context.closePath();
-        this.board.context.fill();
-        this.board.context.stroke();
-    };
+      this.board.context.fillStyle = colour;
+  
+      // Set the border color to white and adjust the width as needed
+      this.board.context.strokeStyle = "white"; // White border
+      this.board.context.lineWidth = 4; // Adjust the border thickness here
+  
+      this.board.context.beginPath();
+      this.board.context.arc(this.x_centre, this.y_centre, this.radius, 0, Math.PI * 2);
+      this.board.context.closePath();
+      this.board.context.fill();
+      this.board.context.stroke();
+  };
+  
 
     Piece.prototype.oldpos_draw = function (colour) {
         this.board.context.strokeStyle = colour;
@@ -91,9 +94,9 @@
             for (var column = 0; column < this.DIM; column++) {
                 // draw a checker board
                 if (((row % 2 === 0) && (column % 2 === 0)) || ((row % 2 === 1) && (column % 2 === 1))) {
-                    cells.push(new Cell(board, board.COLUMNS[column], board.ROWS[row], "ghostwhite"));
-                } else {
                     cells.push(new Cell(board, board.COLUMNS[column], board.ROWS[row], "silver"));
+                } else {
+                    cells.push(new Cell(board, board.COLUMNS[column], board.ROWS[row], "ghostwhite"));
                 }
             }
         }
@@ -400,16 +403,16 @@
             cell.draw(cell.colour);
         });
         if ((this.from_row !== undefined) && (this.game.control === this.game.human_player)) {
-            this.get_cell(this.from_column, this.from_row).draw("greenyellow");
+            this.get_cell(this.from_column, this.from_row).draw("#deaa88");
             this.moves_potential.forEach(function (move) {
                 var column = move[2][move[2].length - 2];
                 var row = move[2][move[2].length - 1];
-                board.get_cell(column, row).draw("yellow");
+                board.get_cell(column, row).draw("#04AF70");
             });
             delete this.highlight;
         }
         if ((this.highlight !== undefined) && (this.game.control === this.game.human_player)) {
-            this.get_cell(this.highlight[0], this.highlight[1]).draw("yellow");
+            this.get_cell(this.highlight[0], this.highlight[1]).draw("#ffcc33");
         }
         this.pieces.forEach(function (piece) {
             piece.draw(piece.colour);
@@ -426,6 +429,7 @@
             "cell(f,1,wp),cell(f,2,b),cell(f,3,wp),cell(f,4,b),cell(f,5,b),cell(f,6,b),cell(f,7,bp),cell(f,8,b)," +
             "cell(g,1,b),cell(g,2,wp),cell(g,3,b),cell(g,4,b),cell(g,5,b),cell(g,6,bp),cell(g,7,b),cell(g,8,bp)," +
             "cell(h,1,wp),cell(h,2,b),cell(h,3,wp),cell(h,4,b),cell(h,5,b),cell(h,6,b),cell(h,7,bp),cell(h,8,b)]";
+            
         this.legals = "[does(red,move(wp,b,3,a,4)),does(red,move(wp,b,3,c,4)),does(red,move(wp,d,3,c,4)),does(red,move(wp,d,3,e,4))," +
             "does(red,move(wp,f,3,e,4)),does(red,move(wp,f,3,g,4)),does(red,move(wp,h,3,g,4))]";
         this.state = this.init;
