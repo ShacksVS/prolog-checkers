@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
- <meta charset="utf-8">
- <title>Checkers Player</title>
- <link rel="stylesheet" href="style.css">
-</head>
+   <head>
+      <meta charset="utf-8">
+      <title>Checkers Player</title>
+      <link rel="stylesheet" href="style.css">
+      <!-- Add the Google Fonts link here -->
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+     </head>     
 <body>
    <canvas id="board" width="800" height="800">Your browser doesn't support canvas!?</canvas>
-   <div id="rightcol">
-     <p id="message">Message</p>
-     <p id="turn">Turn</p>
-    </div>
+   <div class="sidebar">
+      <div id="rightcol">
+        <p id="message">Message</p>
+      </div>
+   
+      <div id="info-container">
+         <p id="redPawns">Red Pawns: 12</p>
+         <p id="blackPawns">Black Pawns: 12</p>
+         <p id="turn">Turn</p>
+      </div>
+   </div>
+   
 </body>
    <script src="script.js"></script>
 </html>

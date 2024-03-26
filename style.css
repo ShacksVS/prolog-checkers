@@ -1,45 +1,44 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: #fffcdf;
     margin: 0;
     padding: 20px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    /* This will ensure the content is centered in the viewport */
-}
-
-.container {
-    display: flex;
-    /* This will align the board and the right column side by side */
-    align-items: center;
-    /* This will vertically align them in case they have different heights */
+    align-items: flex-start; /* Align items at the start for a better layout */
+    height: auto; /* Adjust to auto for a more flexible layout */
 }
 
 #board {
     border: 2px solid #333;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin-right: 20px; /* Added space between the board and the menu */
+    margin-right: 20px; /* Ensure there's space between the board and the sidebar */
 }
 
-#rightcol {
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* This creates space between the containers inside sidebar */
+    width: 200px; /* Adjust width as needed */
+}
+
+#rightcol, #info-container {
     padding: 10px;
     border: 1px solid #ccc;
     background-color: #ffffff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    width: 200px;
-    /* Removed margin-left and added width for consistency */
+    margin-bottom: 20px; /* Add margin for spacing, or you can remove this if using gap */
 }
 
-#message, #turn {
+#message, #turn, #redPawns, #blackPawns {
     padding: 10px;
     margin: 10px 0;
     background-color: #8bd4d4;
     border: 1px solid #d9d9d9;
     text-align: center;
     font-size: 16px;
+    border-radius: 5px;
 }
 
 input[type="button"] {

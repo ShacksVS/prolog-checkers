@@ -141,24 +141,37 @@
         return cells[0];
     };
 
-    Board.prototype.set_pieces = function () { // rename parse_state ?
-        var pieces = [];
-        var board = this;
-        var state_list = prolog_string2list(this.game.state);
-        state_list.forEach(function (term) { // maybe use switch... case
-            if (term[0] === "control") {
-                board.game.control = term[1];
-            }
-            if (term[0] === "step") {
-                board.game.step = term[1];
-                turn.textContent = String(102 - board.game.step) + " turns left";
-            }
-            if ((term[0] === "cell") && (term[3] !== "b")) {
-                pieces.push(new Piece(board, term[1], term[2], term[3]));
-            }
-        });
-        this.pieces = pieces;
+    // Assuming this method is called whenever the board's state is updated
+    Board.prototype.set_pieces = function () {
+      var pieces = [];
+      var redCount = 0;
+      var blackCount = 0;
+      var board = this;
+      var state_list = prolog_string2list(this.game.state);
+      state_list.forEach(function (term) {
+          if (term[0] === "control") {
+              board.game.control = term[1];
+          }
+          if (term[0] === "step") {
+              board.game.step = term[1];
+              turn.textContent = String(102 - board.game.step) + " turns left";
+          }
+          if ((term[0] === "cell") && (term[3] !== "b")) {
+              pieces.push(new Piece(board, term[1], term[2], term[3]));
+              if (term[3] === "wp" || term[3] === "wk") {
+                  redCount++;
+              } else if (term[3] === "bp" || term[3] === "bk") {
+                  blackCount++;
+              }
+          }
+      });
+      this.pieces = pieces;
+
+      // Update the pawn count display
+      document.getElementById("redPawns").textContent = "Red Pawns: " + redCount;
+      document.getElementById("blackPawns").textContent = "Black Pawns: " + blackCount;
     };
+
 
     Board.prototype.get_piece = function (column, row) {
         var pieces = this.pieces.filter(function (piece) {
@@ -390,8 +403,8 @@
         var board = this;
         if (this.game.life_stage === "start") {
             var that = this.game;
-            message.innerHTML = 'Choose the side <input id="red" type="button" value="Red">' +
-                'or <input id="black" type="button" value="Black">';
+            message.innerHTML = 'Choose the side <input id="black" type="button" value="Black">' +
+                '<input id="red" type="button" value="Red">';
             document.getElementById("red").onclick = function () {
                 that.set_player("red");
             };
@@ -456,7 +469,7 @@
             this.human_player = "red";
             this.ai_player = "black";
             this.control = this.human_player;
-            message.textContent = "You to play";
+            message.textContent = "Your Turn";
             document.body.style.cursor = 'pointer';
         } else {
             this.human_player = "black";
@@ -482,7 +495,7 @@
         } else {
             this.life_stage = "underway";
             this.control = this.human_player;
-            message.textContent = "You to play";
+            message.textContent = "Your Turn";
             document.body.style.cursor = 'pointer';
         }
         var move = response[5].split("=")[1];
